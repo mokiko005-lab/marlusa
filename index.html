@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Mar Lusa: premium Portuguese tinned fish, hand-packed in olive oil. Student prototype for a GILT project.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mar Lusa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: retro tin-label site. Tile-blue bands, slab display type, products drawn as tins. */
+:root{
+  --bg:#F3F6FA; --surface:#FFFFFF; --ink:#13233F; --muted:#4A5A74;
+  --tile:#1F5FA8; --tile-soft:#DCE7F5; --lemon:#F2C230; --lemon-ink:#13233F;
+  --line:#C9D5E6; --ok:#1E7A4D; --hero:#1F5FA8;
+  --display:"Alfa Slab One", Rockwell, "Courier New", serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1626; --surface:#16213A; --ink:#E9EEF7; --muted:#A9B6CC;
+  --tile:#6FA3E6; --tile-soft:#1C2E50; --lemon:#F2C230; --lemon-ink:#13233F;
+  --line:#2A3A5C; --ok:#5CCB92; --hero:#173F70; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1626; --surface:#16213A; --ink:#E9EEF7; --muted:#A9B6CC;
+  --tile:#6FA3E6; --tile-soft:#1C2E50; --lemon:#F2C230; --lemon-ink:#13233F;
+  --line:#2A3A5C; --ok:#5CCB92; --hero:#173F70; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.1;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,40px)}
+p{margin:0}
+a{color:var(--tile)}
+:focus-visible{outline:3px solid var(--lemon);outline-offset:2px;border-radius:4px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--tile)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font:600 16px var(--body);text-decoration:none;border:2px solid transparent;cursor:pointer}
+.btn-main{background:var(--lemon);color:var(--lemon-ink)}
+.btn-main:hover{filter:brightness(1.05)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--tile-soft)}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.logo{font-family:var(--display);font-size:24px;color:var(--ink);text-decoration:none;letter-spacing:.02em}
+.logo span{color:var(--tile)}
+.links{display:flex;gap:22px;list-style:none;margin:0;padding:0}
+.links a{color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
+.links a:hover{color:var(--tile)}
+.cart-btn{background:var(--ink);color:var(--bg);border:0;border-radius:999px;min-height:42px;padding:0 16px;font:600 15px var(--body);cursor:pointer;display:flex;gap:8px;align-items:center}
+.count{background:var(--lemon);color:var(--lemon-ink);border-radius:999px;min-width:22px;height:22px;display:inline-grid;place-items:center;font-size:13px;font-variant-numeric:tabular-nums}
+.menu-btn{display:none;background:none;border:2px solid var(--ink);color:var(--ink);border-radius:999px;min-height:42px;padding:0 14px;font:600 15px var(--body);cursor:pointer}
+.right{display:flex;gap:10px;align-items:center}
+@media (max-width:760px){
+  .menu-btn{display:inline-flex;align-items:center;gap:6px}
+  .links{display:none;position:absolute;left:0;right:0;top:100%;background:var(--surface);border-bottom:1px solid var(--line);flex-direction:column;gap:0;padding:8px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px))}
+  .links.open{display:flex}
+  .links a{display:block;padding:12px 0;font-size:17px;border-bottom:1px solid var(--line)}
+  .nav{position:relative}
+}
+
+/* product details */
+.more{background:none;border:0;padding:0;color:var(--tile);font:600 15px var(--body);text-decoration:underline;cursor:pointer;align-self:flex-start;min-height:32px}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 32px));max-height:calc(100% - 48px);overflow:auto;background:var(--surface);border-radius:20px;z-index:20;padding:24px;display:flex;flex-direction:column;gap:14px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.modal header{position:static;border:0;background:none;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.modal h2{font-size:28px}
+.modal dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:8px 16px}
+.modal dt{font-weight:700}
+.modal dd{margin:0;color:var(--muted);min-width:0}
+
+/* reviews */
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.reviews figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.reviews .stars{display:flex;gap:3px;color:#C99512}.reviews .stars svg{width:16px;height:16px}
+.reviews figcaption{font-size:14px;color:var(--muted);margin-top:auto}
+@media (max-width:820px){.reviews{grid-template-columns:1fr}}
+
+/* hero */
+.hero{background:var(--hero);color:#fff;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;opacity:.07;background-image:var(--azulejo);background-size:120px}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;padding-block:64px}
+.hero h1{font-size:clamp(40px,6.5vw,72px)}
+.hero p.lead{font-size:20px;max-width:34ch;margin-top:18px;color:#EAF1FB}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero .btn-ghost{color:#fff;border-color:#fff}
+.hero .btn-ghost:hover{background:rgba(255,255,255,.12)}
+.hero-art{display:flex;justify-content:center}
+@media (max-width:820px){.hero .wrap{grid-template-columns:1fr;padding-block:44px}.hero-art{order:-1}}
+
+/* tins: one SVG per tin, all drawn on the same 300x190 grid */
+.tin{width:100%;max-width:360px;filter:drop-shadow(0 12px 18px rgba(10,20,40,.22))}
+.tin svg{display:block;width:100%;height:auto}
+
+.trust{background:var(--surface);border-bottom:1px solid var(--line)}
+.trust ul{list-style:none;margin:0;padding:16px 0;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 36px;font-weight:600;font-size:15px}
+.trust li{display:flex;align-items:center;gap:8px}.trust svg{width:18px;height:18px;color:var(--ok);flex:none}
+
+section{padding-block:72px}
+.head{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;max-width:640px}
+.head p{color:var(--muted)}
+
+/* benefit */
+.benefit{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.benefit article{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;grid-template-columns:48px 1fr;gap:4px 16px;align-items:start}
+.benefit .ic{grid-row:span 2;width:48px;height:48px;border-radius:12px;background:var(--tile-soft);color:var(--tile);display:grid;place-items:center}
+.benefit .ic svg{width:26px;height:26px}
+.benefit h3{font-size:20px;align-self:center}
+.benefit p{color:var(--muted);font-size:16px}
+@media (max-width:760px){.benefit{grid-template-columns:1fr}}
+
+/* products */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card .tin{max-width:none;filter:drop-shadow(0 6px 10px rgba(10,20,40,.16))}
+.card h3{font-size:21px}
+.meta{color:var(--muted);font-size:14px}
+.tag{align-self:flex-start;background:var(--tile-soft);color:var(--ink);font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;letter-spacing:.04em}
+.price-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto}
+.price{font-family:var(--display);font-size:24px;font-variant-numeric:tabular-nums}
+.add{min-height:44px;padding:0 16px;font-size:15px}
+
+/* enjoy */
+.enjoy{background:var(--tile-soft)}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:w}
+.ways article{background:var(--surface);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.ways .time{font-size:13px;font-weight:700;color:var(--tile);letter-spacing:.08em;text-transform:uppercase}
+.ways ol{margin:0;padding-left:20px;color:var(--muted)}
+@media (max-width:820px){.ways{grid-template-columns:1fr}}
+
+/* story */
+.story .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.story p+p{margin-top:14px}
+.story .text{min-width:0;display:flex;flex-direction:column;gap:14px}
+.gloss{border-left:4px solid var(--lemon);padding:10px 16px;background:var(--surface);border-radius:0 12px 12px 0;font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);border-radius:18px;overflow:hidden;max-width:100%}
+.tiles div{aspect-ratio:1;background-image:var(--azulejo);background-size:100%;background-color:#F7F9FC}
+.cap{font-size:14px;color:var(--muted);margin-top:10px}
+@media (max-width:820px){.story .wrap{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:760px}
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--display);color:var(--tile)}
+details[open] summary::after{content:"–"}
+details p{margin-top:8px;color:var(--muted)}
+
+/* newsletter */
+.news{background:var(--ink);color:var(--bg)}
+.news .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px}
+.news form{display:flex;flex-wrap:wrap;gap:10px;flex:1 1 320px;max-width:480px}
+.news label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.news input{flex:1 1 200px;min-height:48px;border-radius:999px;border:2px solid var(--bg);background:transparent;color:var(--bg);padding:0 18px;font:16px var(--body)}
+.news input::placeholder{color:var(--bg);opacity:.7}
+.news .msg{flex-basis:100%;font-weight:600}
+
+footer{padding-block:32px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+/* cart drawer */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--surface);z-index:20;box-shadow:-10px 0 30px rgba(0,0,0,.2);display:flex;flex-direction:column;padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) 20px;gap:16px}
+.drawer header{position:static;border:0;display:flex;justify-content:space-between;align-items:center;background:none}
+.drawer h2{font-size:26px}
+.x{background:none;border:0;font-size:28px;color:var(--ink);cursor:pointer;line-height:1;min-width:44px;min-height:44px}
+.items{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.item{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font-size:16px}
+.bar{height:8px;background:var(--tile-soft);border-radius:999px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);width:0}
+.total{display:flex;justify-content:space-between;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.note{font-size:14px;color:var(--muted)}
+.scrim{position:fixed;inset:0;background:rgba(5,10,20,.45);z-index:15}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px;font-weight:600;z-index:25}
+</style>
+</head>
+<body>
+
+
+<header>
+  <nav class="wrap nav" aria-label="Main">
+    <a class="logo" href="#top">Mar <span>Lusa</span></a>
+    <ul class="links" id="links">
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#enjoy">How to enjoy</a></li>
+      <li><a href="#story">Our story</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#faq">FAQ &amp; shipping</a></li>
+    </ul>
+    <div class="right">
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="links"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Menu</button>
+      <button class="cart-btn" id="openCart" aria-label="Open cart">Cart <span class="count" id="count">0</span></button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow" style="color:#FFE59A">Hand-packed in Portugal</p>
+        <h1>Sardines, but make it fancy.</h1>
+        <p class="lead">Premium Portuguese tinned fish in olive oil. A gourmet meal in seconds, packed with protein.</p>
+        <div class="actions">
+          <a class="btn btn-main" href="#shop">Shop the Tasting Box</a>
+          <a class="btn btn-ghost" href="#enjoy">3 easy ways to enjoy</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="tin" id="heroTin" role="img" aria-label="Blue Mar Lusa classic sardines tin with a Portuguese tile pattern and a cream label"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust">
+    <ul class="wrap">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Free shipping on orders over $50</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Delivered in 3–5 business days</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Fish, olive oil, salt. Nothing else.</li>
+    </ul>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Why Mar Lusa</p>
+        <h2>A gourmet meal in seconds</h2>
+        <p>Open the tin and it's ready. No cooking, no prep, just good fish caught off the Portuguese coast.</p>
+      </div>
+      <div class="benefit">
+        <article>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></span>
+          <h3>Ready to eat</h3>
+          <p>Fully cooked in the tin. Open it and serve it on toast, in a salad or on a snack board.</p>
+        </article>
+        <article>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c3.5 4.5 6 7.8 6 11a6 6 0 0 1-12 0c0-3.2 2.5-6.5 6-11z"/></svg></span>
+          <h3>Simple ingredients</h3>
+          <p>Fish, olive oil and salt. A natural source of protein and omega-3s.</p>
+        </article>
+        <article>
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+          <h3>Made in Portugal</h3>
+          <p>Hand-packed by small canneries on the Atlantic coast, following a tradition that goes back to the 1800s.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Shop</p>
+        <h2>Pick your tin</h2>
+        <p>All prices in US dollars. Sales tax is added at checkout.</p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="enjoy" class="enjoy">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">How to enjoy</p>
+        <h2>Not sure what to do with a tin? Start here.</h2>
+      </div>
+      <div class="ways">
+        <article>
+          <span class="time">2 minutes</span>
+          <h3>On toast</h3>
+          <ol><li>Toast a slice of sourdough.</li><li>Add sardines and a drizzle of their olive oil.</li><li>Finish with lemon, black pepper and parsley.</li></ol>
+        </article>
+        <article>
+          <span class="time">5 minutes</span>
+          <h3>In a salad</h3>
+          <ol><li>Toss greens, cherry tomatoes and white beans.</li><li>Flake in mackerel with lemon.</li><li>Use the oil from the tin as dressing.</li></ol>
+        </article>
+        <article>
+          <span class="time">10 minutes</span>
+          <h3>On a snack board</h3>
+          <ol><li>Open two or three different tins.</li><li>Add crackers, olives, pickles and cheese.</li><li>Serve with a crisp white wine or sparkling water.</li></ol>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="story" class="story">
+    <div class="wrap">
+      <div class="text">
+        <p class="eyebrow">Our story</p>
+        <h2>From the Portuguese coast to your pantry</h2>
+        <p>Portugal has been canning fish since the 1800s. In towns along the Atlantic coast, sardines and mackerel are still cleaned and packed by hand, then sealed with good olive oil.</p>
+        <p>Mar Lusa means “Portuguese sea”. Our tins bring that tradition to your kitchen, with a design you'll want to keep on the counter.</p>
+        <p class="gloss"><b>Conservas</b> is the Portuguese word for preserved fish. In Portugal, a tin of good conservas is a gift, a quick lunch or the start of a party.</p>
+      </div>
+      <div>
+        <div class="tiles" role="img" aria-label="Blue and white Portuguese tile pattern, the inspiration for the Mar Lusa tin design"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        <p class="cap">Our tins are inspired by <b>azulejos</b>, the painted blue-and-white tiles you see on buildings all over Portugal.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" style="padding-top:0">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Reviews</p>
+        <h2>What tasters say</h2>
+        <p>Sample reviews written for this prototype. A live site would show verified customer reviews here.</p>
+      </div>
+      <div class="reviews">
+        <figure><span class="stars" data-n="5" role="img" aria-label="5 out of 5 stars"></span><blockquote style="margin:0">“I never thought I'd get excited about sardines. The lemon mackerel is now my go-to lunch.”</blockquote><figcaption>Sample review · Brooklyn, NY</figcaption></figure>
+        <figure><span class="stars" data-n="5" role="img" aria-label="5 out of 5 stars"></span><blockquote style="margin:0">“The Tasting Box was the star of our snack board. The tins look so good I kept them.”</blockquote><figcaption>Sample review · Austin, TX</figcaption></figure>
+        <figure><span class="stars" data-n="4" role="img" aria-label="4 out of 5 stars"></span><blockquote style="margin:0">“Quick, healthy and actually tasty. The piri-piri ones have a nice kick.”</blockquote><figcaption>Sample review · Portland, OR</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap faq">
+      <div class="head">
+        <p class="eyebrow">FAQ &amp; shipping</p>
+        <h2>Good to know</h2>
+      </div>
+      <details open><summary>Is the fish ready to eat?</summary><p>Yes. It's fully cooked in the tin. Eat it straight away, cold or warmed up.</p></details>
+      <details><summary>How long does a tin keep?</summary><p>Unopened, about 5 years. Check the “Best by” date on the bottom (for example, Best by 12/31/2029). Once opened, keep it in the fridge and eat within 2 days.</p></details>
+      <details><summary>How much is shipping?</summary><p>Free on orders over $50. Otherwise $5.95. We ship from our US warehouse and your order arrives in 3–5 business days, with tracking by email.</p></details>
+      <details><summary>How can I pay?</summary><p>Visa, Mastercard, American Express, PayPal, Apple Pay and Google Pay.</p></details>
+      <details><summary>Is it sustainable?</summary><p>We work with small Portuguese canneries that buy from local fishing boats. Each product page explains where the fish comes from.</p></details>
+    </div>
+  </section>
+
+  <div class="news">
+    <div class="wrap" style="padding-block:48px">
+      <div>
+        <h2 style="font-size:30px">Get 10% off your first order</h2>
+        <p style="margin-top:6px;opacity:.85">New flavors and recipes, about twice a month.</p>
+      </div>
+      <form id="newsForm" novalidate>
+        <label for="email">Email address</label>
+        <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
+        <button class="btn btn-main" type="submit">Sign up</button>
+        <p class="msg" id="newsMsg" role="status"></p>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Mar Lusa · Made in Portugal</span>
+    <span>Student prototype for a GILT project. Mar Lusa is a fictional brand and no real orders are taken.</span>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Your cart">
+  <header><h2>Your cart</h2><button class="x" id="closeCart" aria-label="Close cart">×</button></header>
+  <div class="items" id="items"></div>
+  <div>
+    <p class="note" id="shipNote"></p>
+    <div class="bar" style="margin-top:6px"><i id="shipBar"></i></div>
+  </div>
+  <div class="total"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+  <button class="btn btn-main" id="checkout">Check out</button>
+  <p class="note">Sales tax calculated at checkout.</p>
+</aside>
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <header><h2 id="mTitle"></h2><button class="x" id="closeModal" aria-label="Close details">×</button></header>
+  <p id="mDesc"></p>
+  <dl>
+    <dt>Size</dt><dd id="mSize"></dd>
+    <dt>Ingredients</dt><dd id="mIng"></dd>
+    <dt>Origin</dt><dd>Caught off the Portuguese Atlantic coast and hand-packed in Portugal.</dd>
+    <dt>Nutrition</dt><dd>Rich in protein and omega-3s. Full nutrition facts are printed on every tin.</dd>
+    <dt>Try it</dt><dd id="mIdea"></dd>
+    <dt>Keeps</dt><dd>About 5 years unopened. Best by date on the bottom (MM/DD/YYYY).</dd>
+  </dl>
+  <div class="price-row"><span class="price" id="mPrice"></span><button class="btn btn-main add" id="mAdd">Add to cart</button></div>
+</div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  // Azulejo-style tile pattern as a data URI, shared by hero, tins and story.
+  var tile = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'><rect width='60' height='60' fill='#F7F9FC'/><g fill='none' stroke='#1F5FA8' stroke-width='3'><circle cx='30' cy='30' r='12'/><path d='M30 6 Q38 18 30 30 Q22 18 30 6Z M30 54 Q38 42 30 30 Q22 42 30 54Z M6 30 Q18 22 30 30 Q18 38 6 30Z M54 30 Q42 22 30 30 Q42 38 54 30Z'/></g><g fill='#1F5FA8'><circle cx='0' cy='0' r='7'/><circle cx='60' cy='0' r='7'/><circle cx='0' cy='60' r='7'/><circle cx='60' cy='60' r='7'/><circle cx='30' cy='30' r='4'/></g></svg>";
+  [['--azulejo',tile]].forEach(function(p){document.documentElement.style.setProperty(p[0],'url("data:image/svg+xml,' + encodeURIComponent(p[1]) + '")')});
+
+  var products = [
+    {id:'box', name:'Tasting Box', tag:'Best seller', desc:'One of each: classic sardines, spicy sardines and lemon mackerel.', size:'3 × 4.2 oz (120 g)', price:24.99, color:'t-box', label:'3-tin box', icon:'box', alt:'Mar Lusa Tasting Box with blue, red and yellow tins', flavor:'Classic · Spicy · Lemon', ing:'See each tin: fish, olive oil, salt, plus piri-piri or lemon.', idea:'Open all three on a snack board with crackers and olives.'},
+    {id:'sar', name:'Classic Sardines', tag:'Mild', desc:'Whole sardines in extra virgin olive oil. Mild and rich.', size:'4.2 oz (120 g)', price:8.99, color:'t-blue', label:'Sardines', icon:'fish', alt:'Blue Mar Lusa classic sardines tin with a Portuguese tile pattern', flavor:'In olive oil', ing:'Sardines, extra virgin olive oil, salt.', idea:'On sourdough toast with lemon and black pepper.'},
+    {id:'spi', name:'Spicy Sardines', tag:'Medium heat', desc:'With piri-piri, a small Portuguese chili. Medium heat.', size:'4.2 oz (120 g)', price:8.99, color:'t-red', label:'Spicy sardines', icon:'chili', alt:'Red Mar Lusa spicy sardines tin covered in small red chili peppers', flavor:'With piri-piri', ing:'Sardines, olive oil, piri-piri chili, salt.', idea:'In a rice bowl with avocado and cucumber.'},
+    {id:'mac', name:'Lemon Mackerel', tag:'Fresh & zesty', desc:'Mackerel fillets with lemon. Great in salads and bowls.', size:'4.2 oz (120 g)', price:9.49, color:'t-yellow', label:'Mackerel', icon:'lemon', alt:'Yellow Mar Lusa mackerel tin decorated with lemon slices', flavor:'With lemon', ing:'Mackerel fillets, olive oil, lemon, salt.', idea:'Flaked into a green salad with white beans.'}
+  ];
+  var cart = {};
+  var $ = function(id){return document.getElementById(id)};
+  var fmt = function(n){return '$' + n.toFixed(2)};
+
+  // ---- Tin drawing. Every tin uses the same grid, line weight and label layout;
+  // only the ink color, the tile's center motif and the label text change.
+  var V = {
+    sar:{ink:'#1F4E8C', paper:'#EDF2F9', kind:'SARDINES',    band:'IN OLIVE OIL',   motif:'dot'},
+    spi:{ink:'#AE3127', paper:'#FAEEEA', kind:'SARDINES',    band:'WITH PIRI-PIRI', motif:'chili'},
+    mac:{ink:'#8E6708', paper:'#FBF4E1', kind:'MACKEREL',    band:'WITH LEMON',     motif:'lemon'},
+    box:{ink:'#13233F', paper:'#EEF1F6', kind:'TASTING BOX', band:'THREE FLAVORS',  motif:'dot'}
+  };
+  var FISH = '<path d="M4 20C16 9 44 6 72 9C84 10.5 92 14.5 98 20C92 25.5 84 29.5 72 31C44 34 16 31 4 20Z"/><path d="M97 20L116 7Q110.5 20 116 33Z"/><path d="M24 11.5Q30 20 24 28.5"/><path d="M50 8.3L58 3.2L66 8.6"/><path d="M32 21Q62 18 92 20" stroke-dasharray="3 3" stroke-width="1"/>';
+  var MOTIF = {
+    chili:'<path d="M3 20C8.5 19.5 15.5 15 17.5 8C18.2 5.8 20.8 5.9 21 8.4C20.6 15.5 12 21 3 20Z"/><path d="M20 6.6C20.2 4.6 21.4 3.4 23 3.2"/>',
+    lemon:'<path d="M4 12C4 7.5 8 4.5 12 4.5S20 7.5 20 12 16 19.5 12 19.5 4 16.5 4 12Z"/><path d="M2 12H4M20 12H22"/><path d="M12 4.5C13 2.5 15.5 1.6 18 2C16.5 3.8 14.5 4.6 12 4.5Z"/>'
+  };
+  var uid = 0;
+  function fish(x, y, k, ink, sw, eye){
+    return '<g transform="translate('+x+' '+y+') scale('+k+')" fill="#FFFBF2" stroke="'+ink+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round">'+FISH+
+      '<circle cx="14" cy="18" r="2.2" fill="'+ink+'" stroke="none"/></g>';
+  }
+  function motif(name, x, y, k, ink, sw){
+    return '<g transform="translate('+x+' '+y+') scale('+k+')" fill="none" stroke="'+ink+'" stroke-width="'+sw+'" stroke-linejoin="round" stroke-linecap="round">'+MOTIF[name]+'</g>';
+  }
+  function tinSVG(id){
+    var v = V[id], p = 'tp'+(uid++), ink = v.ink;
+    var center = v.motif==='dot' ? '<circle cx="20" cy="20" r="2.4" fill="'+ink+'"/>' : motif(v.motif, 14, 14, .5, ink, 2.8);
+    var art;
+    if (id==='box') {
+      art = fish(118, 85, .5, V.sar.ink, 3, 1) + fish(132, 98, .5, V.spi.ink, 3, 1) + fish(118, 111, .5, V.mac.ink, 3, 1);
+    } else if (v.motif==='dot') {
+      art = fish(102, 88, .8, ink, 2);
+    } else {
+      art = fish(86, 90, .7, ink, 2.2) + motif(v.motif, 172, 91, 1.2, ink, 1.5);
+    }
+    return '<svg viewBox="0 0 300 190" aria-hidden="true"><defs>' +
+      '<pattern id="'+p+'" width="40" height="40" patternUnits="userSpaceOnUse" x="10" y="15">' +
+        '<rect width="40" height="40" fill="'+v.paper+'"/>' +
+        '<g fill="none" stroke="'+ink+'" stroke-width="1.6"><circle cx="20" cy="20" r="8.5"/>' +
+        '<path d="M20 3.5Q25.5 12 20 20Q14.5 12 20 3.5ZM20 36.5Q25.5 28 20 20Q14.5 28 20 36.5ZM3.5 20Q12 14.5 20 20Q12 25.5 3.5 20ZM36.5 20Q28 14.5 20 20Q28 25.5 36.5 20Z"/></g>' +
+        '<g fill="'+ink+'"><circle r="4.5"/><circle cx="40" r="4.5"/><circle cy="40" r="4.5"/><circle cx="40" cy="40" r="4.5"/></g>' +
+        '<circle cx="20" cy="20" r="6.2" fill="'+v.paper+'"/>' + center +
+      '</pattern></defs>' +
+      '<rect x="3" y="3" width="294" height="184" rx="26" fill="url(#'+p+')" stroke="#A9B2BF" stroke-width="5"/>' +
+      '<rect x="9" y="9" width="282" height="172" rx="21" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="1.5"/>' +
+      '<rect x="62" y="30" width="176" height="130" rx="10" fill="#FFFBF2" stroke="'+ink+'" stroke-width="2"/>' +
+      '<rect x="67.5" y="35.5" width="165" height="119" rx="6.5" fill="none" stroke="'+ink+'" stroke-width=".8"/>' +
+      '<text x="150" y="55" text-anchor="middle" fill="'+ink+'" style="font:700 9px Figtree,system-ui,sans-serif;letter-spacing:2.2px">'+v.kind+'</text>' +
+      '<text x="150" y="80" text-anchor="middle" fill="#13233F" style="font:400 23px \'Alfa Slab One\',Rockwell,serif">Mar Lusa</text>' +
+      art +
+      '<rect x="67.5" y="128" width="165" height="22" fill="'+ink+'"/>' +
+      '<text x="150" y="142.6" text-anchor="middle" fill="#FFFBF2" style="font:700 8.5px Figtree,system-ui,sans-serif;letter-spacing:1.8px">'+v.band+'</text>' +
+      '</svg>';
+  }
+  $('heroTin').innerHTML = tinSVG('sar');
+  var STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg>';
+  var STAR0=STAR.replace('fill="currentColor"','fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"');
+  document.querySelectorAll('.stars').forEach(function(el){var n=+el.dataset.n,h='';for(var i=0;i<5;i++)h+=i<n?STAR:STAR0;el.innerHTML=h});
+  $('grid').innerHTML = products.map(function(p){
+    return '<article class="card">' +
+      '<div class="tin" role="img" aria-label="'+p.alt+'">'+tinSVG(p.id)+'</div>' +
+      '<span class="tag">'+p.tag+'</span>' +
+      '<h3>'+p.name+'</h3><p>'+p.desc+'</p><p class="meta">'+p.size+'</p>' +
+      '<button class="more" data-more="'+p.id+'">Ingredients &amp; details</button>' +
+      '<div class="price-row"><span class="price">'+fmt(p.price)+'</span>' +
+      '<button class="btn btn-main add" data-id="'+p.id+'" aria-label="Add '+p.name+' to cart">Add to cart</button></div></article>';
+  }).join('');
+
+  function render(){
+    var n=0, sub=0, html='';
+    products.forEach(function(p){
+      var q=cart[p.id]||0; if(!q) return;
+      n+=q; sub+=q*p.price;
+      html+='<div class="item"><div><b>'+p.name+'</b><div class="meta">'+fmt(p.price)+' each</div></div>' +
+        '<div class="qty"><button data-dec="'+p.id+'" aria-label="Remove one '+p.name+'">−</button><span>'+q+'</span><button data-inc="'+p.id+'" aria-label="Add one '+p.name+'">+</button></div></div>';
+    });
+    $('items').innerHTML = html || '<p class="note">Your cart is empty. The Tasting Box is a good place to start.</p>';
+    $('count').textContent = n;
+    $('subtotal').textContent = fmt(sub);
+    var left = 50 - sub;
+    $('shipNote').textContent = left > 0 ? 'Add ' + fmt(left) + ' more for free shipping.' : 'You get free shipping.';
+    $('shipBar').style.width = Math.min(100, sub/50*100) + '%';
+  }
+  function toast(t){var el=$('toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){el.hidden=true},2200)}
+  function open(v){$('drawer').hidden=!v;$('scrim').hidden=!v;if(v)$('closeCart').focus()}
+
+  document.addEventListener('click', function(e){
+    var t=e.target.closest('button'); if(!t) return;
+    if(t.dataset.id){cart[t.dataset.id]=(cart[t.dataset.id]||0)+1;render();var p=products.find(function(x){return x.id===t.dataset.id});toast(p.name+' added to cart')}
+    if(t.dataset.inc){cart[t.dataset.inc]++;render()}
+    if(t.dataset.dec){cart[t.dataset.dec]--;render()}
+    if(t.dataset.more){showModal(t.dataset.more,t)}
+  });
+  var lastFocus=null;
+  function showModal(id,from){
+    var p=products.find(function(x){return x.id===id});lastFocus=from;
+    $('mTitle').textContent=p.name;$('mDesc').textContent=p.desc;$('mSize').textContent=p.size;
+    $('mIng').textContent=p.ing;$('mIdea').textContent=p.idea;$('mPrice').textContent=fmt(p.price);
+    $('mAdd').dataset.id=p.id;$('mAdd').setAttribute('aria-label','Add '+p.name+' to cart');
+    $('modal').hidden=false;$('scrim').hidden=false;$('closeModal').focus();
+  }
+  function hideModal(){if($('modal').hidden)return;$('modal').hidden=true;if($('drawer').hidden)$('scrim').hidden=true;if(lastFocus)lastFocus.focus()}
+  $('closeModal').onclick=hideModal;
+  $('mAdd').addEventListener('click',function(){setTimeout(hideModal,0)});
+  var links=$('links'),mb=$('menuBtn');
+  mb.onclick=function(){var o=links.classList.toggle('open');mb.setAttribute('aria-expanded',o)};
+  links.addEventListener('click',function(e){if(e.target.closest('a')){links.classList.remove('open');mb.setAttribute('aria-expanded','false')}});
+  $('openCart').onclick=function(){open(true)};
+  $('closeCart').onclick=function(){open(false)};
+  $('scrim').onclick=function(){hideModal();open(false)};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'){hideModal();open(false)}});
+  $('checkout').onclick=function(){toast('This is a prototype, so checkout is not active.')};
+  $('newsForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=$('email').value.trim();
+    $('newsMsg').textContent = /.+@.+\..+/.test(v) ? 'Thanks! Your 10% code would arrive by email (prototype).' : 'Please enter a valid email address, like you@example.com.';
+  });
+  render();
+})();
+</script>
+
+</body>
+</html>
